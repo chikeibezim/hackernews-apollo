@@ -1,9 +1,10 @@
 import { gql, useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AUTH_TOKEN } from '../constants';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [formState, setFormState] = useState({
         login: true,
         email: '',
@@ -48,7 +49,7 @@ const Login = () => {
         },
         onCompleted: ({ login }) => {
             localStorage.setItem(AUTH_TOKEN, login.token);
-            Navigate('/')
+            navigate('/')
         }
     })
 
@@ -60,7 +61,7 @@ const Login = () => {
         },
         onCompleted: ({ signup }) => {
             localStorage.setItem(AUTH_TOKEN, signup.token);
-            Navigate('/')
+            navigate('/')
         }
     })
 
@@ -102,7 +103,7 @@ const Login = () => {
                     <div className='flex mt3'>
                         <button 
                             className='pointer mr2 button'
-                            onClick={formState.login ? login : signup}
+                            onClick={() => formState.login ? login() : signup()}
                         >
                             {formState.login ? 'login' : 'create account'}
                         </button>

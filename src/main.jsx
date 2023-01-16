@@ -7,18 +7,34 @@ import { BrowserRouter } from 'react-router-dom';
 //graphql - apollo client uses some of it's functionality within.
 
 import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 import App from './components/App'
 import './styles/index.css'
+import { AUTH_TOKEN } from './constants';
 
 //create httpLink that will connect our ApolloClient instance with the GraphQL API
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000'
 });
 
-//instantiate apolloclient 
+//set token to graphql context to be read by the graphql api
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+})
+
+//instantiate apolloclient
+// /Apollo Links allow us to create middlewares 
+// that modify requests before they are sent to the server.
+
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
 
