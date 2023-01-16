@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom';
 
 //install ApolloClient and graphQL and import dependencies
 //Apollo contains all the pieces needed to wire up the graphql Client for our app.
@@ -25,6 +26,8 @@ const client = new ApolloClient({
 //App is wrapped with the higher-order component ApolloProvider
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ApolloProvider client={client}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ApolloProvider>,
 )
