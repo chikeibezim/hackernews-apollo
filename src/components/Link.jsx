@@ -1,13 +1,42 @@
 import React from 'react';
+import { useMutation, gql } from "@apollo/client"
 import { AUTH_TOKEN } from '../constants';
 import { timeDifferenceforDate } from '../utils';
 
 //component to display a single link
 //this component expects a link in its props and renders the link's description and url
 
+
 const Link = (props) => {
     const { link } = props;
     const authToken = localStorage.getItem(AUTH_TOKEN);
+
+    //create mutation for voting
+    const VOTE_MUTATION = gql`
+        mutation VoteMutation($linkId: ID!){
+            vote(linkId: $linkId){
+                id
+                link{
+                    id
+                    votes {
+                        id
+                        user {
+                            id
+                        }
+                    }
+                }
+                user {
+                    id
+                }
+            }
+        }
+    `;
+
+    const [vote] = useMutation(VOTE_MUTATION, {
+        variables: {
+            linkId: link.id
+        }
+    })
 
     return (
         <div className='flex mt2 items-start'>
@@ -17,7 +46,7 @@ const Link = (props) => {
                     <div
                         className='ml1 gray f11'
                         style={{ cursor: 'pointer'}}
-                        onClick={() => { console.log("Clicked vote button")}}    
+                        onClick={vote}    
                     >
                         ▲
                     </div>
