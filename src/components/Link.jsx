@@ -1,5 +1,6 @@
 import React from 'react';
 import { AUTH_TOKEN } from '../constants';
+import { timeDifferenceforDate } from '../utils';
 
 //component to display a single link
 //this component expects a link in its props and renders the link's description and url
@@ -30,7 +31,7 @@ const Link = (props) => {
                         <div className='f6 lh-copy gray'>
                             {link.votes.length} votes | by {' '}
                             {link.postedBy ? link.postedBy.name : 'Unknown'}{' '}
-                            {timeDifferenceForDate(link.createdAt)}
+                            {timeDifferenceforDate(link.createdAt)}
                         </div>
                     )}
             </div>
