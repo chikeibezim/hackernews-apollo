@@ -4,6 +4,7 @@ import {LinkList} from './LinkList'
 import CreateLink from './CreateLink'
 import Login from './Login'
 import Header from './Header'
+import Search from './Search'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
             <Route path='/' element={<LinkList/>}/>
             <Route path='/create' element={<CreateLink />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/search' element={<Search />} />
         </Routes>
       </div>
       
