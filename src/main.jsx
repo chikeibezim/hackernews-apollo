@@ -9,6 +9,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider, ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+//for subvscription, install and import the following
+import { split } from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+
 import App from './components/App'
 import './styles/index.css'
 import { AUTH_TOKEN } from './constants';
@@ -29,12 +34,42 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+
+//create new WebsocketLink that represents the Websocket connection
+const wesLink = new WebSocketLink({
+  uri: `ws://localhost:4000/graphql`,
+  options: {
+    reconnect: true,
+    connectionParams: {
+      authToken: localStorage.getItem(AUTH_TOKEN)
+    }
+  }
+});
+
+//use split for proper routing of the requests
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return (
+      kind === 'OperationDefinition' &&
+      operation === 'subscription'
+    )
+  },
+  wesLink,
+  authLink.concat(httpLink)
+)
+
 //instantiate apolloclient
 // /Apollo Links allow us to create middlewares 
 // that modify requests before they are sent to the server.
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  /*
+    use this if working without subscriptions
+    link: authLink.concat(httpLink),
+  */
+  link,
   cache: new InMemoryCache()
 });
 
