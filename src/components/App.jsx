@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LinkList from './LinkList'
+import {LinkList} from './LinkList'
 import CreateLink from './CreateLink'
 import Login from './Login'
 import Header from './Header'

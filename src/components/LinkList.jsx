@@ -8,7 +8,7 @@ import Link from './Link';
 //wite the graphql query
 //the FEED_QUERY variable uses gql, a library that uses tagged template literals
 //to parse the GraphQL query document we define.
-const FEED_QEURY = gql`
+const FEED_QUERY = gql`
     {
         feed {
             links {
@@ -42,7 +42,7 @@ const LinkList = () => {
     //which represents a list of link elements
     //Note: there are many more items the hook returns but this 3 are the most important
     
-    const { loading, error, data } = useQuery(FEED_QEURY);
+    const { loading, error, data } = useQuery(FEED_QUERY);
     console.log({loading, error, data });
 
     return (
@@ -58,4 +58,4 @@ const LinkList = () => {
     )
 }
 
-export default LinkList;
+export {LinkList, FEED_QUERY};
