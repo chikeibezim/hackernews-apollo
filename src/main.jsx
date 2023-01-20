@@ -46,7 +46,18 @@ const wesLink = new WebSocketLink({
   }
 });
 
-//use split for proper routing of the requests
+/*
+  use split for proper routing of the requests
+  split is used to route a request to a specific middleware link
+  it takes three arguments. the first is a test fuction that returns a boolean
+  the remaining two arguments ae again of type ApolloLink.
+  If test returns true, the request will be forwwarded to the link passed as the second argument.
+  If it returns false, to the third one.
+
+  here, the test function is checking whether the requested operation is a
+  subscription. If it is, it will be forwarded to the wsLink, otherwise, 
+  (if a query or a mutation), it is forwarded to authLink.concat(httpLink)
+*/
 
 const link = split(
   ({ query }) => {
