@@ -54,12 +54,24 @@ const NEW_VOTES_SUBSCRIPTION = gql`
   }
 `;
 
-//wite the graphql query
-//the FEED_QUERY variable uses gql, a library that uses tagged template literals
-//to parse the GraphQL query document we define.
+/*
+    wite the graphql query
+    the FEED_QUERY variable uses gql, a library that uses tagged template literals
+    to parse the GraphQL query document we define.
+
+    We've also included some arguments for the query for pagination
+    all aligned with the api arguments
+    i. skip is where items will start
+    ii. take defines the limit, or how many items needed
+
+*/
 const FEED_QUERY = gql`
-    {
-        feed {
+    query FeedQuery(
+        $take: Int
+        $skip: Int
+        $orderBy: LinkOrderByInput
+    ){
+        feed(take: $take, skip: $skip, orderBy: $orderBy) {
             links {
                 id
                 createdAt
