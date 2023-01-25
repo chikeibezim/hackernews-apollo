@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 //import useQuery to help us fecth our data drom the database.
 import { useQuery, gql } from '@apollo/client';
 
@@ -95,6 +96,13 @@ const FEED_QUERY = gql`
 
 
 const LinkList = () => {
+    const location = useLocation(); //get current pathway of page visited
+    const isNewPage = location.pathname.includes('new');
+    const pageIndexParams = location.pathname.split('/');
+    const page = parseInt(
+        pageIndexParams[pageIndexParams - 1]
+    );
+    const pageIndex = page ? (page - 1) * LINKS_PER_PAGE : 0;
     /*
       here, the query document is then passed into the useQuery hook in the component
       the hook returns 3 items:
@@ -109,7 +117,9 @@ const LinkList = () => {
       //in order to subscribe to events on the Link type, we'll include a function subscribeToMore that can be destructured 
       //from useQuery
     
-    const { loading, error, data, subscribeToMore } = useQuery(FEED_QUERY);
+    const { loading, error, data, subscribeToMore } = useQuery(FEED_QUERY, {
+        variables: getQueryVariables(isNewPage, page)
+    });
     
     
     /*
